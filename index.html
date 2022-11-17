@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRPG GAME</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="menu">
+        <div class="inner-menu">
+            <div class="buttons-div">
+                <button>New Game</button>
+                <button>Reset Save</button>
+                <button>Settings</button>
+                <button>Credits</button>
+            </div>
+        </div>
+    </div>
+    <canvas class="canvas"></canvas>
+    <div class="dialogue-div">
+        <img id="npc-portrait" src="./Data/Imagens/Personagens/Player/playerPortrait.png" />
+        <h1 id="npc-name"></h1>
+        <div class="npc-dialogue">
+            <p id="npc-dialogue"></p>
+        </div>
+        <div class="npc-dialogue2">
+            <p id="npc-dialogue2"></p>
+        </div>
+        <div class="npc-dialogue3">
+            <p id="npc-dialogue3"></p>
+        </div>
+        <div class="npc-last-dialogue">
+            <p id="npc-last-dialogue"></p>
+            <div id="player-options-container-last"></div>
+        </div>
+        <img id="click-icon" src="./Data/Imagens/GUI/click.png" />
+        <div class="npc-answer">
+            <p id="npc-answer"></p>
+        </div>
+        <div class="npc-answer2">
+            <p id="npc-answer2"></p>
+        </div>
+        <div class="npc-answer3">
+            <p id="npc-answer3"></p>
+        </div>
+        <div id="player-options-container3"></div>
+        <div id="player-options-container2"></div>
+        <div id="player-options-container1"></div>
+    </div>
+    <div class="user-gui">
+        <div class="user-avatar"><img src="./Data/Imagens/GUI/player.png"/></div>
+        <div class="user-name">Player1</div>
+        <div class="user-health"></div>
+        <div class="user-level">Lv.1</div>
+    </div>
+    <div class="user-utils">
+        <img id="util-backpack" src="./Data/Imagens/GUI/backpack.png" />
+    </div>
+    <div class="inventory">
+        <div class="inventory-header">
+            <img id="inventory-exit" src="./Data/Imagens/GUI/x.png" />
+        </div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+        <div class="inventory-item"></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js" integrity="sha512-gmwBmiTVER57N3jYS3LinA9eb8aHrJua5iQD7yqYCKa5x6Jjc7VDVaEA0je0Lu0bP9j7tEjV3+1qUm6loO99Kw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="./Data/Imagens/Personagens/NPC's/Adam/adamPath.js"></script> 
+    <script src="./Data/JSON/MapaTeste/Collision/collisions.js"></script> 
+    <script src="./Data/JSON/doors.js"></script> 
+    <script src="./Classes/Enter.js"></script>    
+    <script src="./Classes/Boundary.js"></script>      
+    <script src="./Classes/Sprite.js"></script> 
+    <script src="./Classes/NPCSprites.js"></script> 
+    <script src="./Classes/NPC.js"></script>    
+    <script src="index.js"></script>    
+</body>
+</html>
