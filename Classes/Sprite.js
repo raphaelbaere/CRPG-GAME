@@ -33,6 +33,7 @@ class Sprite {
     }
 
     draw() {
+        context.fillStyle = 'rgb(255, 0, 0, 0)'
         if (!this.loaded) return;
         context.save()
         context.translate(this.position.x + this.width / 2, this.position.y + this.height / 2)

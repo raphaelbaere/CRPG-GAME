@@ -8,6 +8,8 @@ canvas.height = 576;
 context.fillStyle = 'white';
 context.fillRect(0, 0, canvas.width, canvas.height);
 
+
+// Divs that I created to make the dialogue... just lazy work.
 const dialogueDiv = document.querySelector('.dialogue-div');
 const npcDialogueDiv = document.querySelector('.npc-dialogue');
 const npcDialogueDiv2 = document.querySelector('.npc-dialogue2');
@@ -33,7 +35,7 @@ const inventory = document.querySelector('.inventory');
 const inventoryX = document.querySelector('#inventory-exit');
 
 
-// Colisão entre o player e a boundary
+// Functions for the collisions.
 function rectangularCollision({ rectangle1, rectangle2 }) {
     return (rectangle1.position.x + rectangle1.width >= rectangle2.position.x + 10 &&
         rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
@@ -67,6 +69,7 @@ const handleFinish = () => {
     dialogueDiv.style.display = 'none';
 }
 
+// function for handling the last dialogue
 const handleFinishDialogue = (optionsPassada, divPassada, dialogo, linha, npc2, divAtual, pAtual, optionsAtual, answerAtual, answerPAtual, pAtualTyped) => {
     optionsPassada.addEventListener('click', () => {
         optionsPassada.style.display = 'none';
@@ -98,6 +101,7 @@ const handleFinishDialogue = (optionsPassada, divPassada, dialogo, linha, npc2, 
     localStorage.setItem('adam', 'Não tenho mais nada a te dizer.')
 }
 
+// function for handling answers in the dialog (the click buttons)
 const handleAnswer = (optionsPassada, divPassada, dialogo, linha, npc2, divAtual, pAtual, optionsAtual, answerAtual, answerPAtual, pAtualTyped) => {
     optionsPassada.addEventListener('click', () => {
         optionsPassada.style.display = 'none';
@@ -127,6 +131,7 @@ const handleAnswer = (optionsPassada, divPassada, dialogo, linha, npc2, divAtual
 }
 
 
+// const for handling the phrase, the answer etc..
 const handleDialogue = ({ target }, npc2) => {
     const { innerText } = target;
     switch (innerText) {
@@ -151,6 +156,7 @@ const handleDialogue = ({ target }, npc2) => {
     }
 }
 
+// variable declarations for be changed for each map that I'm rendering right now
 let joe;
 let joeSprite;
 let drawings = [];
@@ -166,6 +172,8 @@ let adam;
 let player;
 let background;
 let level = '1';
+
+// variable to store different levels, all the localStorage are related to the save system.
 const levels = {
     1: {
         init: () => {
@@ -346,6 +354,8 @@ const levels = {
                 name: 'joe',
             })
 
+            // Here is the array that manipules the npc's entitys
+
             nPCS = [adam]
 
             adamSprite = new NPCSprites({
@@ -419,7 +429,13 @@ const levels = {
                     }, ]
             })
 
+            // Here are the array for the drawings, they are sorted and drawed in the correct layer after..
+
             drawings = [adamSprite, joeSprite, player];
+
+
+            // The doors block which the map changes comes from an array that comes from tiled and I parse it to 2d and so on..
+
 
             doors = [];
             for (let index = 0; index < mapEnteringZones.length; index += 80) {
@@ -440,6 +456,8 @@ const levels = {
                 })
             })
 
+
+            // The collision blocks which are rendered according to an array that comes from tiled and I parse it to 2d.
             collisions = [];
             for (let index = 0; index < collisionsTest.length; index += 80) {
                 collisions.push(collisionsTest.slice(index, 80 + index));
@@ -458,14 +476,21 @@ const levels = {
                 })
             })
 
+
+            // The save system for level 1
             if (localStorage.getItem('movables')) {
                 const savedMovables = JSON.parse(localStorage.getItem('movables'));
+
+                // I reset everything and put the saved ones inside.
+
                 background = [];
                 nPCS = [];
                 drawings = [];
                 boundaries = [];
                 entries = [];
                 savedMovables.forEach((movable) => {
+                    // The movables have this .class that tells me where I should put them
+
                     if (movable.map === '1') {
                     switch (movable.class) {
                         case 'background':
@@ -531,7 +556,11 @@ const levels = {
                     }
                 }
                 })
+
+                // The drawings that are sorted after again..
                 drawings = [...drawings, player]
+
+                // The movables array, like I told you.
                 movables = [background, ...boundaries, ...entries, ...nPCS, drawings[0], drawings[1]]
             } else {
                 background = new BACKGROUND({
@@ -542,10 +571,12 @@ const levels = {
                     imageSrc: './Data/Imagens/Mapa/testeMap.png',
                     map: '1',
                 });
+                // The movables array, like I told you.
                 movables = [background, ...boundaries, ...entries, ...nPCS, drawings[0], drawings[1]]
             }
         },
     },
+    // The second level, it's the same for the level 1, if you have any doubt just check the comments in the level 1
     2: {
         init: () => {
             if (localStorage.getItem('level')) {
@@ -735,6 +766,7 @@ const levels = {
     },
 }
 
+// Some buttons in the menu
 buttons[0].addEventListener('click', () => {
     const menu = document.querySelector('.menu');
     menu.style.display = 'none';
@@ -753,6 +785,7 @@ buttons[1].addEventListener('click', () => {
     }
 });
 
+// This is the backpack icon. To save the game, click in the X after opening the backpack. Lazy work!
 backpack.addEventListener('click', () => {
     if (dialogue.initiated) return;
     inventory.style.display = 'flex';
@@ -766,10 +799,12 @@ backpack.addEventListener('click', () => {
     })
 })
 
+// If have saves, changes the button inner text.
 if (localStorage.getItem('movables')) {
     buttons[0].innerHTML = 'Continue'
 }
 
+// Key controlling the player variable
 let keys = {
     e: {
         pressed: false,
@@ -788,10 +823,12 @@ let keys = {
     },
 }
 
+// Key controlling the player variable
 let lastKey = '';
 let lastKey2 = '';
 
 
+// Key controlling the player events
 window.addEventListener('keydown', (event) => {
     switch (event.key) {
         case 'e':
@@ -817,6 +854,7 @@ window.addEventListener('keydown', (event) => {
     }
 })
 
+// Key controlling the player events
 window.addEventListener('keyup', (event) => {
     switch (event.key) {
         case 'e':
@@ -838,6 +876,7 @@ window.addEventListener('keyup', (event) => {
     }
 })
 
+// Const to control if the dialogue is running and same for the other ones.
 const dialogue = {
     initiated: false,
 }
@@ -847,12 +886,15 @@ const game = {
     changeMap: false,
 }
 
+// This is for the animation of the canvas going black.
 const overlay = {
     opacity: 0,
 }
 
 
+// The actual animate function that has the animate loop
 function animate() {
+    // drawing stuff, you see the drawings being sorted and then drawed.
     window.requestAnimationFrame(animate)
     background.draw()
     drawings.sort((a, b) => {
@@ -876,6 +918,8 @@ function animate() {
     let moving = true;
     player.animate = true;
 
+
+    // checking for map enters collision, if player are colliding and press 'w', it enters the new map.
     for (let i = 0; i < entries.length; i++) {
         const enter = entries[i];
         if (rectangularCollisionForMap({
@@ -910,6 +954,7 @@ function animate() {
         }
     }
 
+    // Here are the behavior system... a bit messy, any doubt send me a msg.
     for (let i = 0; i < nPCS.length; i++) {
         const npc = nPCS[i];
         if (!rectangularCollisionForNPC({
@@ -944,7 +989,7 @@ function animate() {
         }
     }
 
-
+    // Here is the dialogue part. If the player collides with a npc and press 'E', it starts the dialogue.
     for (let i = 0; i < nPCS.length; i++) {
         const npc = nPCS[i];
         if (rectangularCollisionForChat({
@@ -1009,7 +1054,7 @@ function animate() {
         break;
     }
 
-
+    // moving the player, collisions checking and stuff
     if (keys.w.pressed && lastKey === 'w') {
         if (dialogue.initiated) return;
         player.switchSprites('walkUp');
@@ -1059,11 +1104,11 @@ function animate() {
             })
         }
     }
-
+    // moving the player, collisions checking and stuff
     if (!keys.w.pressed && lastKey === 'w') {
         player.switchSprites('idleUp')
     }
-
+    // moving the player, collisions checking and stuff
     if (keys.s.pressed && lastKey === 's') {
         if (dialogue.initiated) return;
         player.switchSprites('walkDown');
@@ -1109,11 +1154,11 @@ function animate() {
             })
         }
     }
-
+    // moving the player, collisions checking and stuff
     if (!keys.s.pressed && lastKey === 's') {
         player.switchSprites('idleDown')
     }
-
+    // moving the player, collisions checking and stuff
     if (keys.a.pressed && lastKey === 'a') {
         if (dialogue.initiated) return;
         player.switchSprites('walkLeft')
@@ -1159,11 +1204,11 @@ function animate() {
             })
         }
     }
-
+    // moving the player, collisions checking and stuff
     if (!keys.a.pressed && lastKey === 'a') {
         player.switchSprites('idleLeft')
     }
-
+    // moving the player, collisions checking and stuff
     if (keys.d.pressed && lastKey === 'd') {
         if (dialogue.initiated) return;
         player.switchSprites('walkRight');
@@ -1209,13 +1254,13 @@ function animate() {
             })
         }
     }
-
+    // moving the player, collisions checking and stuff
     if (!keys.d.pressed && lastKey === 'd') {
         player.switchSprites('idleRight')
     }
 }
 
-
+ // To know in which level u were and put you there.
 if (localStorage.getItem('level') === '2') {
     levels[2].init()
 } else {
