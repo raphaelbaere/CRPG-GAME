@@ -44,7 +44,7 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
 function rectangularCollisionForMap({ rectangle1, rectangle2 }) {
     return (rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
         rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
-        rectangle1.position.y <= rectangle2.position.y + 3 + rectangle2.width &&
+        rectangle1.position.y <= rectangle2.position.y - 25 + rectangle2.width &&
         rectangle1.position.y + rectangle1.height >= rectangle2.position.y)
 }
 
@@ -320,14 +320,14 @@ const levels = {
             characters = [adamSprite];
 
             doors = [];
-            for (let index = 0; index < mapEnteringZones.length; index += 60) {
-                doors.push(mapEnteringZones.slice(index, 60 + index));
+            for (let index = 0; index < mapEnteringZones.length; index += 80) {
+                doors.push(mapEnteringZones.slice(index, 80 + index));
             }
 
             entries = [];
             doors.forEach((row, y) => {
                 row.forEach((symbol, x) => {
-                    if (symbol === 31858)
+                    if (symbol === 6002)
                         entries.push(new Enter({
                             position: {
                                 x: x * 32 + offset.x,
@@ -338,13 +338,13 @@ const levels = {
             })
 
             collisions = [];
-            for (let index = 0; index < collisionsTest.length; index += 60) {
-                collisions.push(collisionsTest.slice(index, 60 + index));
+            for (let index = 0; index < collisionsTest.length; index += 80) {
+                collisions.push(collisionsTest.slice(index, 80 + index));
             }
             boundaries = [];
             collisions.forEach((row, y) => {
                 row.forEach((symbol, x) => {
-                    if (symbol === 31857)
+                    if (symbol === 4501)
                         boundaries.push(new Boundary({
                             position: {
                                 x: x * 32 + offset.x,
@@ -712,6 +712,7 @@ const dialogue = {
 
 const game = {
     initiated: false,
+    changeMap: false,
 }
 
 const overlay = {
@@ -761,6 +762,7 @@ function animate() {
                         gsap.to(overlay, {
                             opacity: 1,
                             onComplete() {
+                                game.changeMap = true;
                                 levels[2].init();
                                 gsap.to(overlay, {
                                     opacity: 0,
@@ -783,7 +785,7 @@ function animate() {
                 x: npc.position.x,
                 y: npc.position.y,
             }}
-        }) && !dialogue.initiated) {
+        }) && !dialogue.initiated && !game.changeMap) {
             drawings = [adamSprite, player];
             drawings.sort((a, b) => {
               return  a.position.y - b.position.y
