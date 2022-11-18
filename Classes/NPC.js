@@ -35,6 +35,7 @@ class NPC extends Sprite {
         this.map = map;
     }
     update() {
+        // function to update the position of the npc entity
         if (!this.paths) return;
         const waypoint = this.paths[this.waypointIndex]
         const yDistance = waypoint.position.y - this.position.y
@@ -54,6 +55,7 @@ class NPC extends Sprite {
     }
 
     move(direction) {
+        //function to update the position of the path when I move with wasd
         if (!this.paths) return;
         switch (direction) {
             case 'w':

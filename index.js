@@ -1,3 +1,4 @@
+// Basic setup stuff
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 const buttons = document.querySelectorAll('button');
@@ -157,6 +158,14 @@ const handleDialogue = ({ target }, npc2) => {
 }
 
 // variable declarations for be changed for each map that I'm rendering right now
+let samuel;
+let samuelSprite;
+let gloria;
+let gloriaSprite;
+let dan;
+let danSprite;
+let abbySprite;
+let abby;
 let joe;
 let joeSprite;
 let drawings = [];
@@ -190,7 +199,7 @@ const levels = {
                 imageSrc: './Data/Imagens/Personagens/Player/player.png',
                 frames: {
                     max: 6,
-                    hold: 10,
+                    hold: 12,
                 },
                 map: '1',
                 sprites: {
@@ -198,7 +207,7 @@ const levels = {
                         imageSrc: './Data/Imagens/Personagens/Player/playerUp.png',
                         frames: {
                             max: 4,
-                            hold: 10,
+                            hold: 12,
                             val: 0,
                             elapsed: 0,
                         }
@@ -314,6 +323,110 @@ const levels = {
                 }],
             });
 
+            abby = new NPC({
+                position: {
+                    x: 264.333333333333,
+                    y: 412.666666666667,
+                },
+                map: '1',
+                imageSrc: "./Data/Imagens/Personagens/NPC's/Abby/abbyReading.png",
+                frames: {
+                    max: 18,
+                    hold: 10,
+                },
+                name: 'abby',
+                animate: true,
+                dialogue: [{
+                    npcLine: ['Olá. Eu sou a Abby! Você é novo por aqui, certo?'],
+                    playerOptions: [ 'Não, não sou novo. Eu só.. perdí minha memória.',
+                     'E se eu for? O que você tem a ver com isso?', 'Ok. Esquisito..'],
+                }, {
+                    npcLine: ['Perdeu sua memória? O que houve?', 'Não muito.. Só estava sendo educado.', 'Esquisito? Eu?! Por quê?'],
+                    playerOptions: ['Eu acordei na ala psiquiátrica. Disseram que eu estava andando pelado na rua...', 'Tudo bem, perdão pela grosseria..', 'Abordando pessoas que você nem conhece pela rua...',]
+                }, {
+                    npcLine: ['Cara, que bizarro. Melhor tomar mais cuidado.', 'Tranquilo, passou.', 'Eu só estava sendo educado, otário.'],
+                    playerOptions: ['Sair..', 'Sair..', 'Sair..']
+                }],
+            });
+
+            gloria = new NPC({
+                position: {
+                    x: 900.333333333333,
+                    y: 395.666666666667,
+                },
+                map: '1',
+                imageSrc: "./Data/Imagens/Personagens/NPC's/Gloria/gloria.png",
+                frames: {
+                    max: 20,
+                    hold: 10,
+                },
+                name: 'glória',
+                animate: true,
+                dialogue: [{
+                    npcLine: ['Olá. Eu sou a Glória! Você é novo por aqui, certo?'],
+                    playerOptions: [ 'Não, não sou novo. Eu só.. perdí minha memória.',
+                     'E se eu for? O que você tem a ver com isso?', 'Ok. Esquisito..'],
+                }, {
+                    npcLine: ['Perdeu sua memória? O que houve?', 'Não muito.. Só estava sendo educado.', 'Esquisito? Eu?! Por quê?'],
+                    playerOptions: ['Eu acordei na ala psiquiátrica. Disseram que eu estava andando pelado na rua...', 'Tudo bem, perdão pela grosseria..', 'Abordando pessoas que você nem conhece pela rua...',]
+                }, {
+                    npcLine: ['Cara, que bizarro. Melhor tomar mais cuidado.', 'Tranquilo, passou.', 'Eu só estava sendo educado, otário.'],
+                    playerOptions: ['Sair..', 'Sair..', 'Sair..']
+                }],
+            });
+
+            dan = new NPC({
+                position: {
+                    x: 1245.333333333333,
+                    y: 140.666666666667,
+                },
+                map: '1',
+                imageSrc: "./Data/Imagens/Personagens/NPC's/Dan/dan.png",
+                frames: {
+                    max: 6,
+                    hold: 10,
+                },
+                name: 'dan',
+                animate: true,
+                dialogue: [{
+                    npcLine: ['Olá. Eu sou o Dan! Você é novo por aqui, certo?'],
+                    playerOptions: [ 'Não, não sou novo. Eu só.. perdí minha memória.',
+                     'E se eu for? O que você tem a ver com isso?', 'Ok. Esquisito..'],
+                }, {
+                    npcLine: ['Perdeu sua memória? O que houve?', 'Não muito.. Só estava sendo educado.', 'Esquisito? Eu?! Por quê?'],
+                    playerOptions: ['Eu acordei na ala psiquiátrica. Disseram que eu estava andando pelado na rua...', 'Tudo bem, perdão pela grosseria..', 'Abordando pessoas que você nem conhece pela rua...',]
+                }, {
+                    npcLine: ['Cara, que bizarro. Melhor tomar mais cuidado.', 'Tranquilo, passou.', 'Eu só estava sendo educado, otário.'],
+                    playerOptions: ['Sair..', 'Sair..', 'Sair..']
+                }],
+            });
+
+            samuel = new NPC({
+                position: {
+                    x: 1275.333333333333,
+                    y: 420.666666666667,
+                },
+                map: '1',
+                imageSrc: "./Data/Imagens/Personagens/NPC's/Samuel/samuel.png",
+                frames: {
+                    max: 6,
+                    hold: 10,
+                },
+                name: 'samuel',
+                animate: true,
+                dialogue: [{
+                    npcLine: ['Olá. Eu sou o Samuel! Você é novo por aqui, certo?'],
+                    playerOptions: [ 'Não, não sou novo. Eu só.. perdí minha memória.',
+                     'E se eu for? O que você tem a ver com isso?', 'Ok. Esquisito..'],
+                }, {
+                    npcLine: ['Perdeu sua memória? O que houve?', 'Não muito.. Só estava sendo educado.', 'Esquisito? Eu?! Por quê?'],
+                    playerOptions: ['Eu acordei na ala psiquiátrica. Disseram que eu estava andando pelado na rua...', 'Tudo bem, perdão pela grosseria..', 'Abordando pessoas que você nem conhece pela rua...',]
+                }, {
+                    npcLine: ['Cara, que bizarro. Melhor tomar mais cuidado.', 'Tranquilo, passou.', 'Eu só estava sendo educado, otário.'],
+                    playerOptions: ['Sair..', 'Sair..', 'Sair..']
+                }],
+            });
+
             joe = new NPC({
                 position: {
                     x: 100.333333333333,
@@ -356,7 +469,7 @@ const levels = {
 
             // Here is the array that manipules the npc's entitys
 
-            nPCS = [adam]
+            nPCS = [adam, joe, abby, dan, gloria, samuel]
 
             adamSprite = new NPCSprites({
                 position: {
@@ -429,9 +542,66 @@ const levels = {
                     }, ]
             })
 
+            abbySprite = new NPCSprites({
+                position: {
+                    x: 264.333333333333,
+                    y: 412.666666666667,
+                },
+                map: '1',
+                imageSrc: "./Data/Imagens/Personagens/NPC's/Abby/abbyReading.png",
+                frames: {
+                    max: 18,
+                    hold: 10,
+                },
+                name: 'abby',
+            })
+
+            gloriaSprite = new NPCSprites({
+                position: {
+                    x: 900.333333333333,
+                    y: 395.666666666667,
+                },
+                map: '1',
+                imageSrc: "./Data/Imagens/Personagens/NPC's/Gloria/gloria.png",
+                frames: {
+                    max: 18,
+                    hold: 10,
+                },
+                name: 'gloria',
+            })
+
+            
+            danSprite = new NPCSprites({
+                position: {
+                    x: 1245.333333333333,
+                    y: 140.666666666667,
+                },
+                map: '1',
+                imageSrc: "./Data/Imagens/Personagens/NPC's/Dan/dan.png",
+                frames: {
+                    max: 6,
+                    hold: 10,
+                },
+                name: 'dan',
+            })
+
+            samuelSprite = new NPCSprites({
+                position: {
+                    x: 1275.333333333333,
+                    y: 420.666666666667,
+                },
+                map: '1',
+                imageSrc: "./Data/Imagens/Personagens/NPC's/Samuel/samuel.png",
+                frames: {
+                    max: 6,
+                    hold: 10,
+                },
+                name: 'samuel',
+            })
+
             // Here are the array for the drawings, they are sorted and drawed in the correct layer after..
 
-            drawings = [adamSprite, joeSprite, player];
+            drawings = [adamSprite, joeSprite, abbySprite, danSprite, gloriaSprite, samuelSprite, player];
 
 
             // The doors block which the map changes comes from an array that comes from tiled and I parse it to 2d and so on..
@@ -561,7 +731,7 @@ const levels = {
                 drawings = [...drawings, player]
 
                 // The movables array, like I told you.
-                movables = [background, ...boundaries, ...entries, ...nPCS, drawings[0], drawings[1]]
+                movables = [background, ...boundaries, ...entries, ...nPCS, drawings[0], drawings[1], drawings[2], drawings[3], drawings[4], drawings[5]]
             } else {
                 background = new BACKGROUND({
                     position: {
@@ -572,7 +742,7 @@ const levels = {
                     map: '1',
                 });
                 // The movables array, like I told you.
-                movables = [background, ...boundaries, ...entries, ...nPCS, drawings[0], drawings[1]]
+                movables = [background, ...boundaries, ...entries, ...nPCS, drawings[0], drawings[1], drawings[2], drawings[3], drawings[4], drawings[5]]
             }
         },
     },
@@ -963,7 +1133,7 @@ function animate() {
                 x: npc.position.x,
                 y: npc.position.y,
             }}
-        }) && !dialogue.initiated && !game.changeMap) {
+        }) && !dialogue.initiated) {
             drawings.sort((a, b) => {
               return  a.position.y - b.position.y
             }).forEach((drawing) => {
@@ -974,19 +1144,14 @@ function animate() {
                     npc4.update()
                 })
             }
-        } else if (rectangularCollisionForNPC({
-            rectangle1: player,
-            rectangle2: {...npc, position: {
-                x: npc.position.x,
-                y: npc.position.y,
-            }}
-        })) {
+        } else {
             drawings.forEach((drawing) => {
                 if (drawing.position.x === npc.position.x) {
                     drawing.switchSprites(drawing.lastSprite)
                 }
             })
         }
+        break;
     }
 
     // Here is the dialogue part. If the player collides with a npc and press 'E', it starts the dialogue.
@@ -1051,7 +1216,6 @@ function animate() {
                 }
             })
         }
-        break;
     }
 
     // moving the player, collisions checking and stuff
@@ -1088,7 +1252,6 @@ function animate() {
             })) {
                 player.animate = false;
                 moving = false;
-                break;
             }
         }
 
@@ -1140,7 +1303,6 @@ function animate() {
             })) {
                 player.animate = false;
                 moving = false;
-                break;
             }
         }
         if (moving) {
@@ -1190,7 +1352,6 @@ function animate() {
             })) {
                 player.animate = false;
                 moving = false;
-                break;
             }
         }
         if (moving) {
@@ -1240,7 +1401,6 @@ function animate() {
             })) {
                 player.animate = false;
                 moving = false;
-                break;
             }
         }
         if (moving) {
