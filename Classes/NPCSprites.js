@@ -30,6 +30,7 @@ class NPCSprites extends Sprite {
     }
 
     update() {
+        // function to update the position of the npc entity
         if (!this.paths) return;
         this.draw();
 
@@ -61,6 +62,7 @@ class NPCSprites extends Sprite {
 
 
     move(direction) {
+        //function to update the position of the path when I move with wasd
         if (!this.paths) return;
         switch (direction) {
             case 'w':

@@ -18,6 +18,7 @@ class Sprite {
         this.class = 'sprite';
         this.map = map;
 
+        // function to make sprites work
         if (this.sprites) {
             for (let key in this.sprites) {
                 const image = new Image();
@@ -27,13 +28,13 @@ class Sprite {
         }
     }
 
+    // function to switch sprites
     switchSprites(name) {
         this.image = this.sprites[name].image;
         this.frames = this.sprites[name].frames;
     }
 
     draw() {
-        context.fillStyle = 'rgb(255, 0, 0, 0)'
         if (!this.loaded) return;
         context.save()
         context.translate(this.position.x + this.width / 2, this.position.y + this.height / 2)
@@ -65,6 +66,7 @@ class Sprite {
     }
 
     update() {
+            // function to update the position of the player
         this.draw();
     }
 
