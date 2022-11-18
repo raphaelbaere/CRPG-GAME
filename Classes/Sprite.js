@@ -1,5 +1,5 @@
 class Sprite {
-    constructor({position, velocity, imageSrc, frames = { max: 1, hold: 10 }, sprites, animate, rotation = 0 }) {
+    constructor({position, velocity, imageSrc, frames = { max: 1, hold: 10 }, sprites, animate, rotation = 0, map }) {
         this.position = position
         this.image = new Image()
         this.frames = { ...frames, val: 0, elapsed: 0 }
@@ -16,6 +16,7 @@ class Sprite {
         this.loaded = false;
         this.imageSrc = imageSrc;
         this.class = 'sprite';
+        this.map = map;
 
         if (this.sprites) {
             for (let key in this.sprites) {

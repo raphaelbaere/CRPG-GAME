@@ -1,11 +1,12 @@
 class Enter {
     static width = 32
     static height = 32
-    constructor({ position }) {
+    constructor({ position, map }) {
         this.position = position
         this.width = 32
         this.height = 32
         this.class = 'enter';
+        this.map = map;
     }
 
     draw () {

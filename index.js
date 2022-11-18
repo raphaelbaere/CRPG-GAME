@@ -35,7 +35,7 @@ const inventoryX = document.querySelector('#inventory-exit');
 
 // Colisão entre o player e a boundary
 function rectangularCollision({ rectangle1, rectangle2 }) {
-    return (rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
+    return (rectangle1.position.x + rectangle1.width >= rectangle2.position.x + 10 &&
         rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
         rectangle1.position.y <= rectangle2.position.y + rectangle2.width - 60 &&
         rectangle1.position.y + rectangle1.height >= rectangle2.position.y)
@@ -151,10 +151,12 @@ const handleDialogue = ({ target }, npc2) => {
     }
 }
 
+let joe;
+let joeSprite;
+let drawings = [];
 let adamSpriteX = 550;
 let adamSprite;
 let nPCS = [];
-let characters = [];
 let doors;
 let entries;
 let collisions;
@@ -167,6 +169,7 @@ let level = '1';
 const levels = {
     1: {
         init: () => {
+            localStorage.setItem('level', '1')
             const offset = {
                 x: -699,
                 y: -560,
@@ -181,6 +184,7 @@ const levels = {
                     max: 6,
                     hold: 10,
                 },
+                map: '1',
                 sprites: {
                     walkUp: {
                         imageSrc: './Data/Imagens/Personagens/Player/playerUp.png',
@@ -257,13 +261,32 @@ const levels = {
                 }
             });
 
-            characters = [];
             adam = new NPC({
                 position: {
                     x: 311.333333333333,
                     y: 200.666666666667,
                 },
+                map: '1',
                 imageSrc: "./Data/Imagens/Personagens/NPC's/Adam/Adam.png",
+                paths: [
+                    {
+                     position: {
+                        "x": 311.333333333,
+                        "y": 200.666666667,
+                     }
+                    }, 
+                    {
+                     position: {
+                        "x": 202.333333333,
+                        "y": 200.666666667,
+                        }
+                    }, 
+                    {
+                     position: {
+                        "x": 311.333333333,
+                        "y": 200.666666667,
+                        }
+                    }, ],
                 frames: {
                     max: 6,
                     hold: 10,
@@ -280,8 +303,49 @@ const levels = {
                 }, {
                     npcLine: ['Cara, que bizarro. Melhor tomar mais cuidado.', 'Tranquilo, passou.', 'Eu só estava sendo educado, otário.'],
                     playerOptions: ['Sair..', 'Sair..', 'Sair..']
-                }]
+                }],
             });
+
+            joe = new NPC({
+                position: {
+                    x: 100.333333333333,
+                    y: 200.666666666667,
+                },
+                map: '1',
+                imageSrc: "./Data/Imagens/Personagens/NPC's/Joe/Joe.png",
+                frames: {
+                    max: 6,
+                    hold: 10,
+                },
+                name: 'joe',
+                animate: true,
+                dialogue: [{
+                    npcLine: ['Olá. Eu sou o Joe! Você é novo por aqui, certo?'],
+                    playerOptions: [ 'Não, não sou novo. Eu só.. perdí minha memória.',
+                     'E se eu for? O que você tem a ver com isso?', 'Ok. Esquisito..'],
+                }, {
+                    npcLine: ['Perdeu sua memória? O que houve?', 'Não muito.. Só estava sendo educado.', 'Esquisito? Eu?! Por quê?'],
+                    playerOptions: ['Eu acordei na ala psiquiátrica. Disseram que eu estava andando pelado na rua...', 'Tudo bem, perdão pela grosseria..', 'Abordando pessoas que você nem conhece pela rua...',]
+                }, {
+                    npcLine: ['Cara, que bizarro. Melhor tomar mais cuidado.', 'Tranquilo, passou.', 'Eu só estava sendo educado, otário.'],
+                    playerOptions: ['Sair..', 'Sair..', 'Sair..']
+                }],
+            });
+
+            joeSprite = new NPCSprites({
+                position: {
+                    x: 100.333333333333,
+                    y: 200.666666666667,
+                },
+                map: '1',
+                imageSrc: "./Data/Imagens/Personagens/NPC's/Joe/Joe.png",
+                frames: {
+                    max: 6,
+                    hold: 10,
+                },
+                name: 'joe',
+            })
+
             nPCS = [adam]
 
             adamSprite = new NPCSprites({
@@ -289,6 +353,7 @@ const levels = {
                     x: 311.333333333333,
                     y: 200.666666666667,
                 },
+                map: '1',
                 imageSrc: "./Data/Imagens/Personagens/NPC's/Adam/Adam.png",
                 frames: {
                     max: 6,
@@ -332,10 +397,29 @@ const levels = {
                             elapsed: 0,
                         }
                     },
-                }
+                },
+                paths: [
+                    {
+                     position: {
+                        "x": 311.333333333,
+                        "y": 200.666666667,
+                     }
+                    }, 
+                    {
+                     position: {
+                        "x": 202.333333333,
+                        "y": 200.666666667,
+                        }
+                    }, 
+                    {
+                     position: {
+                        "x": 311.333333333,
+                        "y": 200.666666667,
+                        }
+                    }, ]
             })
 
-            characters = [adamSprite];
+            drawings = [adamSprite, joeSprite, player];
 
             doors = [];
             for (let index = 0; index < mapEnteringZones.length; index += 80) {
@@ -350,7 +434,8 @@ const levels = {
                             position: {
                                 x: x * 32 + offset.x,
                                 y: y * 32 + offset.y,
-                            }
+                            },
+                            map: '1',
                         }))
                 })
             })
@@ -367,26 +452,30 @@ const levels = {
                             position: {
                                 x: x * 32 + offset.x,
                                 y: y * 32 + offset.y,
-                            }
+                            },
+                            map: '1',
                         }))
                 })
             })
 
             if (localStorage.getItem('movables')) {
                 const savedMovables = JSON.parse(localStorage.getItem('movables'));
+                background = [];
                 nPCS = [];
-                characters = [];
+                drawings = [];
                 boundaries = [];
                 entries = [];
                 savedMovables.forEach((movable) => {
+                    if (movable.map === '1') {
                     switch (movable.class) {
-                        case 'sprite':
-                            background = new Sprite({
+                        case 'background':
+                            background = new BACKGROUND({
                                 position: {
                                     x: movable.position.x,
                                     y: movable.position.y,
                                 },
                                 imageSrc: movable.imageSrc,
+                                map: movable.map,
                             });
                             break;
                         case 'boundary':
@@ -394,7 +483,8 @@ const levels = {
                                 position: {
                                     x: movable.position.x,
                                     y: movable.position.y,
-                                }
+                                },
+                                map: movable.map,
                             }))
                             break;
                         case 'enter':
@@ -402,7 +492,8 @@ const levels = {
                                 position: {
                                     x: movable.position.x,
                                     y: movable.position.y,
-                                }
+                                },
+                                map: movable.map,
                             }))
                             break;
                         case 'npc':
@@ -418,66 +509,75 @@ const levels = {
                                 isEnemy: movable.isEnemy,
                                 dialogue: movable.dialogue,
                                 dialogueCount: movable.dialogueCount,
+                                paths: movable.paths,
+                                map: movable.map,
                             }))
                             break;
                         case 'npcSprites':
-                            characters.push(new NPCSprites({
+                            drawings.push(new NPCSprites({
                                 position: {
                                     x: movable.position.x,
                                     y: movable.position.y,
                                 },
                                 imageSrc: movable.imageSrc,
                                 name: movable.name,
+                                sprites: movable.sprites,
                                 animate: movable.animate,
                                 frames: movable.frames,
+                                paths: movable.paths,
+                                map: movable.map,
                             }))
+                        break;
                     }
+                }
                 })
-                characters = [...characters, player]
-                movables = [background, ...boundaries, ...entries, ...nPCS, characters[0], ...adamPath]
+                drawings = [...drawings, player]
+                movables = [background, ...boundaries, ...entries, ...nPCS, drawings[0], drawings[1]]
             } else {
-                background = new Sprite({
+                background = new BACKGROUND({
                     position: {
                         x: -699,
                         y: -560,
                     },
                     imageSrc: './Data/Imagens/Mapa/testeMap.png',
+                    map: '1',
                 });
-                movables = [background, ...boundaries, ...entries, ...nPCS, characters[0], ...adamPath]
+                movables = [background, ...boundaries, ...entries, ...nPCS, drawings[0], drawings[1]]
             }
-            characters = [...characters, player]
         },
     },
     2: {
         init: () => {
-            level = '2';
             if (localStorage.getItem('level')) {
-                localStorage.removeItem('level')
+                localStorage.removeItem('level');
             } else {
                 localStorage.setItem('level', '2')
             }
+            game.changeMap = false;
+            level = '2';
             player = new Sprite({
                 position: {
                     x: 500,
                     y: 250,
                 },
-                imageSrc: './Data/Imagens/Personagens/Player/player.png',
+                imageSrc: './Data/Imagens/Personagens/Player/player48.png',
+                map: '2',
                 frames: {
                     max: 6,
-                    hold: 10,
+                    hold: 8,
                 },
                 sprites: {
                     walkUp: {
-                        imageSrc: './Data/Imagens/Personagens/Player/playerUp.png',
+                        imageSrc: './Data/Imagens/Personagens/Player/playerUp48.png',
                         frames: {
-                            max: 4,
+                            max: 6,
                             hold: 10,
                             val: 0,
                             elapsed: 0,
                         }
                     },
                     idleUp: {
-                        imageSrc: './Data/Imagens/Personagens/Player/playerIdleUp.png',
+                        imageSrc: './Data/Imagens/Personagens/Player/playerIdleUp48.png',
                         frames: {
                             max: 6,
                             hold: 10,
@@ -486,7 +586,7 @@ const levels = {
                         }
                     },
                     walkDown: {
-                        imageSrc: './Data/Imagens/Personagens/Player/playerDown.png',
+                        imageSrc: './Data/Imagens/Personagens/Player/playerDown48.png',
                         frames: {
                             max: 6,
                             hold: 10,
@@ -495,7 +595,7 @@ const levels = {
                         }
                     },
                     idleDown: {
-                        imageSrc: './Data/Imagens/Personagens/Player/player.png',
+                        imageSrc: './Data/Imagens/Personagens/Player/playerIdleDown48.png',
                         frames: {
                             max: 6,
                             hold: 10,
@@ -504,7 +604,7 @@ const levels = {
                         }
                     },
                     walkRight: {
-                        imageSrc: './Data/Imagens/Personagens/Player/playerRight.png',
+                        imageSrc: './Data/Imagens/Personagens/Player/playerRight48.png',
                         frames: {
                             max: 6,
                             hold: 10,
@@ -513,7 +613,7 @@ const levels = {
                         }
                     },
                     idleRight: {
-                        imageSrc: './Data/Imagens/Personagens/Player/playerIdleRight.png',
+                        imageSrc: './Data/Imagens/Personagens/Player/playerIdleRight48.png',
                         frames: {
                             max: 6,
                             hold: 10,
@@ -522,7 +622,7 @@ const levels = {
                         }
                     },
                     walkLeft: {
-                        imageSrc: './Data/Imagens/Personagens/Player/playerLeft.png',
+                        imageSrc: './Data/Imagens/Personagens/Player/playerLeft48.png',
                         frames: {
                             max: 6,
                             hold: 10,
@@ -531,7 +631,7 @@ const levels = {
                         }
                     },
                     idleLeft: {
-                        imageSrc: './Data/Imagens/Personagens/Player/playerIdleLeft.png',
+                        imageSrc: './Data/Imagens/Personagens/Player/playerIdleLeft48.png',
                         frames: {
                             max: 6,
                             hold: 10,
@@ -541,33 +641,38 @@ const levels = {
                     },
                 }
             });
-            background = new Sprite({
+            background = new BACKGROUND({
                 position: {
-                    x: -100,
-                    y: -150,
+                    x: -800,
+                    y: -900,
                 },
-                imageSrc: './Data/Imagens/Mapa/roomMap2.png',
+                imageSrc: './Data/Imagens/Mapa/roomMap.png',
+                map: '2',
             })
-            characters = [player];
+            drawings = [];
+            drawings = [player]
             nPCS = [];
             entries = [];
             boundaries = [];
             movables = [background]
             if (localStorage.getItem('movables')) {
                 const savedMovables = JSON.parse(localStorage.getItem('movables'));
+                drawings = [];
                 nPCS = [];
-                characters = [];
                 boundaries = [];
                 entries = [];
                 savedMovables.forEach((movable) => {
+                if (movable.map === '2') {
                     switch (movable.class) {
-                        case 'sprite':
-                            background = new Sprite({
+                        case 'background':
+                            background = new BACKGROUND({
                                 position: {
                                     x: movable.position.x,
                                     y: movable.position.y,
                                 },
                                 imageSrc: movable.imageSrc,
+                                class: movable.class,
+                                map: movable.map,
                             });
                             break;
                         case 'boundary':
@@ -575,6 +680,8 @@ const levels = {
                                 position: {
                                     x: movable.position.x,
                                     y: movable.position.y,
+                                    class: movable.class,
+                                    map: movable.map,
                                 }
                             }))
                             break;
@@ -583,6 +690,8 @@ const levels = {
                                 position: {
                                     x: movable.position.x,
                                     y: movable.position.y,
+                                    class: movable.class,
+                                    map: movable.map,
                                 }
                             }))
                             break;
@@ -599,10 +708,12 @@ const levels = {
                                 isEnemy: movable.isEnemy,
                                 dialogue: movable.dialogue,
                                 dialogueCount: movable.dialogueCount,
+                                class: movable.class,
+                                map: movable.map,
                             }))
                             break;
                         case 'npcSprites':
-                            characters.push(new NPCSprites({
+                            drawings.push(new NPCSprites({
                                 position: {
                                     x: movable.position.x,
                                     y: movable.position.y,
@@ -611,10 +722,13 @@ const levels = {
                                 name: movable.name,
                                 animate: movable.animate,
                                 frames: movable.frames,
+                                class: movable.class,
+                                map: movable.map,
                             }))
                     }
+                }
                 })
-                characters = [...characters, player]
+                drawings = [player]
                 movables = [background, ...boundaries, ...entries, ...nPCS]
             }
         },
@@ -741,10 +855,10 @@ const overlay = {
 function animate() {
     window.requestAnimationFrame(animate)
     background.draw()
-    characters.sort((a, b) => {
+    drawings.sort((a, b) => {
         return a.position.y - b.position.y
-    }).forEach((characters) => {
-        characters.draw();
+    }).forEach((drawing) => {
+        drawing.draw();
     })
     boundaries.forEach((boundary) => {
         boundary.draw();
@@ -774,6 +888,7 @@ function animate() {
             },
         })) {
             if (keys.w.pressed && lastKey === 'w') {
+                localStorage.setItem('level', '2')
                 gsap.to(overlay, {
                     opacity: 1,
                     onComplete() {
@@ -804,15 +919,28 @@ function animate() {
                 y: npc.position.y,
             }}
         }) && !dialogue.initiated && !game.changeMap) {
-            drawings = [adamSprite, player];
             drawings.sort((a, b) => {
               return  a.position.y - b.position.y
             }).forEach((drawing) => {
                 drawing.update()
             })
-            adam.update()
-        } else {
-            adamSprite.switchSprites(adamSprite.lastSprite)
+            if (nPCS.length !== 0) {
+                nPCS.forEach((npc4) => {
+                    npc4.update()
+                })
+            }
+        } else if (rectangularCollisionForNPC({
+            rectangle1: player,
+            rectangle2: {...npc, position: {
+                x: npc.position.x,
+                y: npc.position.y,
+            }}
+        })) {
+            drawings.forEach((drawing) => {
+                if (drawing.position.x === npc.position.x) {
+                    drawing.switchSprites(drawing.lastSprite)
+                }
+            })
         }
     }
 
@@ -828,7 +956,13 @@ function animate() {
         }) && keys.e.pressed && lastKey === 'e') {
             if (dialogue.initiated) return;
             nPCS.forEach((npc2) => {
-                if (npc2.position.x === npc.position.x) {
+                if (npc2.position.x === npc.position.x && rectangularCollisionForChat({
+                    rectangle1: player,
+                    rectangle2: {...npc, position: {
+                        x: npc.position.x,
+                        y: npc.position.y,
+                    }}
+                })) {
                     dialogue.initiated = true;
                     dialogueDiv.style.display = 'flex';
                     npcName.innerText = npc2.name;
@@ -916,7 +1050,12 @@ function animate() {
         
         if (moving) {
             movables.forEach((movable) => {
-                movable.position.y += 3
+                if (movable.paths) {
+                    movable.position.y += 3
+                    movable.move('w')
+                } else {
+                    movable.position.y += 3
+                }
             })
         }
     }
@@ -961,7 +1100,12 @@ function animate() {
         }
         if (moving) {
             movables.forEach((movable) => {
-                movable.position.y -= 3
+                if (movable.paths) {
+                    movable.position.y -= 3
+                    movable.move('s')
+                } else {
+                    movable.position.y -= 3
+                }
             })
         }
     }
@@ -1006,7 +1150,12 @@ function animate() {
         }
         if (moving) {
             movables.forEach((movable) => {
-                movable.position.x += 3
+                if (movable.paths) {
+                    movable.position.x += 3
+                    movable.move('a')
+                } else {
+                    movable.position.x += 3
+                }
             })
         }
     }
@@ -1051,7 +1200,12 @@ function animate() {
         }
         if (moving) {
             movables.forEach((movable) => {
-                movable.position.x -= 3
+                if (movable.paths) {
+                    movable.position.x -= 3
+                    movable.move('d')
+                } else {
+                    movable.position.x -= 3
+                }
             })
         }
     }

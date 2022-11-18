@@ -10,6 +10,8 @@ class NPC extends Sprite {
         isEnemy = false,
         dialogue,
         name,
+        paths,
+        map,
     }) {
         super({
             position,
@@ -18,7 +20,8 @@ class NPC extends Sprite {
             frames,
             sprites,
             animate,
-            rotation
+            rotation,
+            map
             })
         this.isEnemy = isEnemy
         this.name = name
@@ -27,10 +30,13 @@ class NPC extends Sprite {
         this.dialogueCount = 0;
         this.dialogueSequency = 0;
         this.dialogueFinished = false;
-        this.waypointIndex = 0;
+        this.waypointIndex = 1;
+        this.paths = paths;
+        this.map = map;
     }
     update() {
-        const waypoint = adamPath[this.waypointIndex]
+        if (!this.paths) return;
+        const waypoint = this.paths[this.waypointIndex]
         const yDistance = waypoint.position.y - this.position.y
         const xDistance = waypoint.position.x - this.position.x
         const angle = Math.atan2(yDistance, xDistance)
@@ -38,12 +44,38 @@ class NPC extends Sprite {
         this.position.y += Math.sin(angle);
 
         if (Math.round(this.position.x) === Math.round(waypoint.position.x) && Math.round(this.position.y) === Math.round(waypoint.position.y) &&
-            this.waypointIndex < adamPath.length - 1) {
+            this.waypointIndex < this.paths.length - 1) {
             this.waypointIndex++
         }
 
-        if (this.waypointIndex === adamPath.length - 1) {
+        if (this.waypointIndex === this.paths.length - 1) {
             this.waypointIndex = 0
+        }
+    }
+
+    move(direction) {
+        if (!this.paths) return;
+        switch (direction) {
+            case 'w':
+                this.paths.forEach((path) => {
+                    path.position.y += 3
+                })
+            break;
+            case 'a':
+                this.paths.forEach((path) => {
+                    path.position.x += 3
+                })
+            break;
+            case 'd':
+                this.paths.forEach((path) => {
+                    path.position.x -= 3
+                })
+            break;
+            case 's':
+                this.paths.forEach((path) => {
+                    path.position.y -= 3
+                })
+            break;
         }
     }
 }

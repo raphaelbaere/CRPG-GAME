@@ -25,7 +25,8 @@
 
 .canvas {
     display: none;
-    margin: 20px auto;
+    width: 100vw;
+    height: 100vh;
 }
 
 button {

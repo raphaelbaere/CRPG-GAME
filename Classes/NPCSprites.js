@@ -8,6 +8,8 @@ class NPCSprites extends Sprite {
         animate,
         rotation = 0,
         name,
+        paths,
+        map,
     }) {
         super({
             position,
@@ -23,12 +25,15 @@ class NPCSprites extends Sprite {
         this.class = 'npcSprites';
         this.waypointIndex = 1;
         this.lastSprite = '';
+        this.paths = paths;
+        this.map = map;
     }
 
     update() {
+        if (!this.paths) return;
         this.draw();
 
-        const waypoint = adamPath[this.waypointIndex]
+        const waypoint = this.paths[this.waypointIndex]
         const yDistance = waypoint.position.y - this.position.y
         const xDistance = waypoint.position.x - this.position.x
         const angle = Math.atan2(yDistance, xDistance)
@@ -45,12 +50,39 @@ class NPCSprites extends Sprite {
         }
 
         if (Math.round(this.position.x) === Math.round(waypoint.position.x) && Math.round(this.position.y) === Math.round(waypoint.position.y) &&
-            this.waypointIndex < adamPath.length - 1) {
+            this.waypointIndex < this.paths.length - 1) {
             this.waypointIndex++
         }
 
-        if (this.waypointIndex === adamPath.length - 1) {
+        if (this.waypointIndex === this.paths.length - 1) {
             this.waypointIndex = 0
+        }
+    }
+
+
+    move(direction) {
+        if (!this.paths) return;
+        switch (direction) {
+            case 'w':
+                this.paths.forEach((path) => {
+                    path.position.y += 3
+                })
+            break;
+            case 'a':
+                this.paths.forEach((path) => {
+                    path.position.x += 3
+                })
+            break;
+            case 'd':
+                this.paths.forEach((path) => {
+                    path.position.x -= 3
+                })
+            break;
+            case 's':
+                this.paths.forEach((path) => {
+                    path.position.y -= 3
+                })
+            break;
         }
     }
 }
