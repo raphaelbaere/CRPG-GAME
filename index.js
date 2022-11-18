@@ -314,6 +314,24 @@ const levels = {
                             elapsed: 0,
                         }
                     },
+                    idleRight: {
+                        imageSrc: "./Data/Imagens/Personagens/NPC's/Adam/adamIdleRight.png",
+                        frames: {
+                            max: 6,
+                            hold: 20,
+                            val: 0,
+                            elapsed: 0,
+                        }
+                    },
+                    idleLeft: {
+                        imageSrc: "./Data/Imagens/Personagens/NPC's/Adam/adamIdleLeft.png",
+                        frames: {
+                            max: 6,
+                            hold: 20,
+                            val: 0,
+                            elapsed: 0,
+                        }
+                    },
                 }
             })
 
@@ -793,7 +811,9 @@ function animate() {
                 drawing.update()
             })
             adam.update()
-        } else {}
+        } else {
+            adamSprite.switchSprites(adamSprite.lastSprite)
+        }
     }
 
 

@@ -37,11 +37,11 @@ class NPCSprites extends Sprite {
 
         if (this.waypointIndex === 1) {
             this.switchSprites('walkLeft')
-            this.lastSprite = 'walkLeft'
+            this.lastSprite = 'idleLeft'
 
         } else if (this.waypointIndex === 0) {
             this.switchSprites('walkRight')
-            this.lastSprite = 'walkRight'
+            this.lastSprite = 'idleRight'
         }
 
         if (Math.round(this.position.x) === Math.round(waypoint.position.x) && Math.round(this.position.y) === Math.round(waypoint.position.y) &&
