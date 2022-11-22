@@ -1,5 +1,5 @@
 class Sprite {
-    constructor({position, velocity, imageSrc, frames = { max: 1, hold: 10 }, sprites, animate, rotation = 0, map }) {
+    constructor({position, velocity, imageSrc, frames = { max: 1, hold: 10 }, sprites, animate, rotation = 0, map, path }) {
         this.position = position
         this.image = new Image()
         this.frames = { ...frames, val: 0, elapsed: 0 }
@@ -17,6 +17,8 @@ class Sprite {
         this.imageSrc = imageSrc;
         this.class = 'sprite';
         this.map = map;
+        this.path = path;
+        this.lastSprite = '';
 
         // function to make sprites work
         if (this.sprites) {
@@ -68,6 +70,23 @@ class Sprite {
     update() {
             // function to update the position of the player
         this.draw();
+        if (this.path) {
+            const yDistance = this.path.position.y - this.position.y - 35
+            const xDistance = this.path.position.x - this.position.x
+            const angle = Math.atan2(yDistance, xDistance)
+            this.position.x += Math.cos(angle);
+            this.position.y += Math.sin(angle);
+            if (Math.cos(angle) > 0) {
+                this.switchSprites('walkRight');
+                this.lastSprite = 'idleRight';
+            } else if (Math.cos(angle) < 0) {
+                this.switchSprites('walkLeft');
+                this.lastSprite = 'idleLeft';
+            } else if (Math.sin(angle) > 0) {
+                this.switchSprites('walkUp');
+                this.lastSprite = 'idleUp'
+            }
+        }
     }
 
 }

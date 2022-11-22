@@ -8,19 +8,25 @@
 .menu {
   width: 100vw;
   height: 100vh;
-  background-color: cornflowerblue;
+  background-image: url('./Data/Imagens/GUI/StartScreen/startScreen.png');
+  background-repeat: no-repeat;
+  background-size: cover;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 
 .inner-menu {
-    width: 80%;
-    height: 80%;
-    background-color: white;
+    width: 22%;
+    height: 100%;
+    margin-left: 200px;
+    background-color: rgba(130, 77, 27);
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: left;
+    border-left: 5px solid #3c4453;
+    border-right: 5px solid #3c4453;
 }
 
 .canvas {
@@ -30,9 +36,11 @@
 }
 
 button {
-    color: black;
-    background-color: white;
-    font-size: 50px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    font-size: 40px;
+    text-align: right;
 }
 
 button:hover {
@@ -40,7 +48,7 @@ button:hover {
 }
 
 .buttons-div {
-    background-color: white;
+    background-color: rgba(0, 0, 0, 0);
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -332,4 +340,13 @@ body {
 
 .inventory-header img:hover {
     cursor: pointer;
+}
+
+#overlapping-div {
+    background-color: black;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
 }

@@ -9,19 +9,23 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="menu">
         <div class="inner-menu">
             <div class="buttons-div">
-                <button>New Game</button>
-                <button>Reset Save</button>
-                <button>Settings</button>
-                <button>Credits</button>
+                <button>NEW GAME</button>
+                <button>RESET SAVE</button>
+                <button>SETTINGS</button>
+                <button>CREDITS</button>
             </div>
         </div>
     </div>
     <canvas class="canvas"></canvas>
+    <div id="overlapping-div"></div>
     <div class="dialogue-div">
         <img id="npc-portrait" src="./Data/Imagens/Personagens/Player/playerPortrait.png" />
         <h1 id="npc-name"></h1>
@@ -141,7 +145,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js" integrity="sha512-gmwBmiTVER57N3jYS3LinA9eb8aHrJua5iQD7yqYCKa5x6Jjc7VDVaEA0je0Lu0bP9j7tEjV3+1qUm6loO99Kw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
     <script src="./Data/JSON/MapaTeste/Collision/collisions.js"></script> 
+    <script src="./Data/JSON/MapaTeste/BattleFloor/battleFloor.js"></script> 
     <script src="./Data/JSON/doors.js"></script> 
+    <script src="./Classes/BattleFloor.js"></script> 
     <script src="./Classes/Enter.js"></script>   
     <script src="./Classes/Boundary.js"></script>      
     <script src="./Classes/Sprite.js"></script>

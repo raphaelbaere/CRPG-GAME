@@ -76,12 +76,7 @@ const handleFinishDialogue = (optionsPassada, divPassada, dialogo, linha, npc2, 
         optionsPassada.style.display = 'none';
         divPassada.style.display = 'none';
         divAtual.style.display = 'flex';
-        const options = {
-            strings: [npc2.dialogue[dialogo].npcLine[linha]],
-            typeSpeed: 30,
-          };
-          
-          const typed = new Typed('#npc-dialogue3', options);
+        pAtual.innerText = npc2.dialogue[dialogo].npcLine[linha]
         divAtual.addEventListener('click', () => {
             pAtual.innerText = '';
             divAtual.style.display = 'none';
@@ -99,21 +94,17 @@ const handleFinishDialogue = (optionsPassada, divPassada, dialogo, linha, npc2, 
                 optionsAtual.appendChild(button);
         })
     }) 
-    localStorage.setItem('adam', 'Não tenho mais nada a te dizer.')
+    localStorage.setItem(npc2.name, 'Não tenho mais nada a te dizer.')
 }
 
 // function for handling answers in the dialog (the click buttons)
 const handleAnswer = (optionsPassada, divPassada, dialogo, linha, npc2, divAtual, pAtual, optionsAtual, answerAtual, answerPAtual, pAtualTyped) => {
     optionsPassada.addEventListener('click', () => {
+        optionsPassada.innerHTML = '';
         optionsPassada.style.display = 'none';
         divPassada.style.display = 'none';
         divAtual.style.display = 'flex';
-        const options = {
-            strings: [npc2.dialogue[dialogo].npcLine[linha]],
-            typeSpeed: 30,
-          };
-          
-          const typed = new Typed('#npc-dialogue2', options);
+        pAtual.innerText = npc2.dialogue[dialogo].npcLine[linha]
         divAtual.addEventListener('click', () => {
             pAtual.innerText = '';
             divAtual.style.display = 'none';
@@ -154,6 +145,16 @@ const handleDialogue = ({ target }, npc2) => {
         case 'Abordando pessoas que você nem conhece pela rua...':
             handleFinishDialogue(playerOptionsContainer2, npcAnswerDiv2, 2, 2, npc2, npcDialogueDiv3, npcDialogue3, playerOptionsContainer3, npcAnswerDiv3, npcAnswer3)
         break;
+        case "No, I'm not new. I have lost my memories...":
+            handleAnswer(playerOptionsContainer, npcAnswerDiv, 1, 0, npc2, npcDialogueDiv2, npcDialogue2, playerOptionsContainer2, npcAnswerDiv2, npcAnswer2, '#npc-dialogue2')
+        break;
+        case "What if I am? What you have to do with it?":
+            handleAnswer(playerOptionsContainer, npcAnswerDiv, 1, 1, npc2, npcDialogueDiv2, npcDialogue2, playerOptionsContainer2, npcAnswerDiv2, npcAnswer2, '#npc-dialogue2')
+        break;
+        case 'Ok.. weirdo..':
+            handleAnswer(playerOptionsContainer, npcAnswerDiv, 1, 2, npc2, npcDialogueDiv2, npcDialogue2, playerOptionsContainer2, npcAnswerDiv2, npcAnswer2, '#npc-dialogue2')
+        break;
+
     }
 }
 
@@ -177,10 +178,13 @@ let entries;
 let collisions;
 let boundaries;
 let movables;
+let battleFloor;
+let battleFloors;
 let adam;
 let player;
 let background;
 let level = '1';
+let activeTile;
 
 // variable to store different levels, all the localStorage are related to the save system.
 const levels = {
@@ -311,9 +315,9 @@ const levels = {
                 name: 'adam',
                 animate: true,
                 dialogue: [{
-                    npcLine: ['Olá. Eu sou o Adam! Você é novo por aqui, certo?'],
-                    playerOptions: [ 'Não, não sou novo. Eu só.. perdí minha memória.',
-                     'E se eu for? O que você tem a ver com isso?', 'Ok. Esquisito..'],
+                    npcLine: ["Hey! I'm Adam! You're new around here, don't you?"],
+                    playerOptions: [ "No, I'm not new. I have lost my memories...",
+                     "What if I am? What you have to do with it?", 'Ok.. weirdo..'],
                 }, {
                     npcLine: ['Perdeu sua memória? O que houve?', 'Não muito.. Só estava sendo educado.', 'Esquisito? Eu?! Por quê?'],
                     playerOptions: ['Eu acordei na ala psiquiátrica. Disseram que eu estava andando pelado na rua...', 'Tudo bem, perdão pela grosseria..', 'Abordando pessoas que você nem conhece pela rua...',]
@@ -441,9 +445,9 @@ const levels = {
                 name: 'joe',
                 animate: true,
                 dialogue: [{
-                    npcLine: ['Olá. Eu sou o Joe! Você é novo por aqui, certo?'],
-                    playerOptions: [ 'Não, não sou novo. Eu só.. perdí minha memória.',
-                     'E se eu for? O que você tem a ver com isso?', 'Ok. Esquisito..'],
+                    npcLine: ["The building is closed. Try another time."],
+                    playerOptions: [ "Ok.. I will come back another time.",
+                     "Get your ass off the door!", "And you're following whose orders?"],
                 }, {
                     npcLine: ['Perdeu sua memória? O que houve?', 'Não muito.. Só estava sendo educado.', 'Esquisito? Eu?! Por quê?'],
                     playerOptions: ['Eu acordei na ala psiquiátrica. Disseram que eu estava andando pelado na rua...', 'Tudo bem, perdão pela grosseria..', 'Abordando pessoas que você nem conhece pela rua...',]
@@ -599,6 +603,20 @@ const levels = {
                 name: 'samuel',
             })
 
+            cat = new NPCSprites({
+                position: {
+                    x: 1275.333333333333,
+                    y: 420.666666666667,
+                },
+                map: '1',
+                imageSrc: "./Data/Imagens/Personagens/NPC's/Samuel/samuel.png",
+                frames: {
+                    max: 6,
+                    hold: 10,
+                },
+                name: 'samuel',
+            })
+
             // Here are the array for the drawings, they are sorted and drawed in the correct layer after..
 
             drawings = [adamSprite, joeSprite, abbySprite, danSprite, gloriaSprite, samuelSprite, player];
@@ -645,6 +663,27 @@ const levels = {
                         }))
                 })
             })
+
+            // Battle
+            battleFloor = [];
+            for (let index = 0; index < battleFloorTest.length; index += 80) {
+                battleFloor.push(battleFloorTest.slice(index, 80 + index));
+            }
+            battleFloors = [];
+            battleFloor.forEach((row, y) => {
+                row.forEach((symbol, x) => {
+                    if (symbol === 6012) {
+                        battleFloors.push(new BattleFloor({
+                            position: {
+                                x: x * 32 + offset.x,
+                                y: y * 32 + offset.y,
+                            },
+                            map: '1',
+                        }))
+                    }
+                })
+            })
+
 
 
             // The save system for level 1
@@ -731,7 +770,7 @@ const levels = {
                 drawings = [...drawings, player]
 
                 // The movables array, like I told you.
-                movables = [background, ...boundaries, ...entries, ...nPCS, drawings[0], drawings[1], drawings[2], drawings[3], drawings[4], drawings[5]]
+                movables = [background, ...boundaries, ...entries, ...nPCS, drawings[0], drawings[1], drawings[2], drawings[3], drawings[4], drawings[5], ...battleFloors]
             } else {
                 background = new BACKGROUND({
                     position: {
@@ -742,7 +781,7 @@ const levels = {
                     map: '1',
                 });
                 // The movables array, like I told you.
-                movables = [background, ...boundaries, ...entries, ...nPCS, drawings[0], drawings[1], drawings[2], drawings[3], drawings[4], drawings[5]]
+                movables = [background, ...boundaries, ...entries, ...nPCS, drawings[0], drawings[1], drawings[2], drawings[3], drawings[4], drawings[5], ...battleFloors]
             }
         },
     },
@@ -1057,9 +1096,6 @@ const game = {
 }
 
 // This is for the animation of the canvas going black.
-const overlay = {
-    opacity: 0,
-}
 
 
 // The actual animate function that has the animate loop
@@ -1075,15 +1111,19 @@ function animate() {
     boundaries.forEach((boundary) => {
         boundary.draw();
     })
+    battleFloors.forEach((battleFloor) => {
+        battleFloor.update(mouse)
+    })
     entries.forEach((enter) => {
         enter.draw();
     })
-    
-    context.save()
-    context.globalAlpha = overlay.opacity;
-    context.fillStyle = 'black';
-    context.fillRect(0, 0, canvas.width, canvas.height);
-    context.restore()
+    if (player.path) {
+        if (Math.round(player.position.x) === Math.round(player.path.position.x) &&
+         Math.round(player.position.y) === Math.round(player.path.position.y) - 35) {
+            player.path = null;
+            player.switchSprites(player.lastSprite)
+        }
+    }
     if (!game.initiated) return;
     let moving = true;
     player.animate = true;
@@ -1103,15 +1143,19 @@ function animate() {
         })) {
             if (keys.w.pressed && lastKey === 'w') {
                 localStorage.setItem('level', '2')
-                gsap.to(overlay, {
+                userGui.style.display = 'none';
+                userUtils.style.display = 'none';
+                gsap.to('#overlapping-div', {
                     opacity: 1,
                     onComplete() {
-                        gsap.to(overlay, {
+                        gsap.to('#overlapping-div', {
                             opacity: 1,
                             onComplete() {
                                 game.changeMap = true;
                                 levels[2].init();
-                                gsap.to(overlay, {
+                                userGui.style.display = 'flex';
+                                userUtils.style.display = 'flex';
+                                gsap.to('#overlapping-div', {
                                     opacity: 0,
                                     onComplete() {
                                     }
@@ -1165,25 +1209,19 @@ function animate() {
             }}
         }) && keys.e.pressed && lastKey === 'e') {
             if (dialogue.initiated) return;
-            nPCS.forEach((npc2) => {
-                if (npc2.position.x === npc.position.x && rectangularCollisionForChat({
-                    rectangle1: player,
-                    rectangle2: {...npc, position: {
-                        x: npc.position.x,
-                        y: npc.position.y,
-                    }}
-                })) {
                     dialogue.initiated = true;
+                    console.log(npc)
                     dialogueDiv.style.display = 'flex';
-                    npcName.innerText = npc2.name;
-                    if (localStorage.getItem(npc2.name)) {
+                    npcName.innerText = npc.name;
+                    if (localStorage.getItem(npc.name)) {
                         npcLastDialogueDiv.style.display = 'flex';
-                        npcLastDialogue.innerText = localStorage.getItem(npc2.name);
+                        npcLastDialogue.innerText = localStorage.getItem(npc.name);
                         const button = document.createElement('button');
                         button.className = "player-options";
                         button.innerText = "Tudo bem, adeus..";
                         button.addEventListener('click', () => {
                             dialogue.initiated = false;
+                            npcLastDialogueDiv.style.display = 'none';
                             dialogueDiv.style.display = 'none';
                         })
                         if (playerLastOptionContainer.children.length === 1) return;
@@ -1191,30 +1229,27 @@ function animate() {
                         playerLastOptionContainer.style.display = 'flex';
                         return;
                     }
-                    const options = {
-                        strings: [npc2.dialogue[0].npcLine[0]],
-                        typeSpeed: 30,
-                      };
-                      
-                      const typed = new Typed('#npc-dialogue', options);
+                     npcDialogue.innerText = npc.dialogue[0].npcLine[0];
+                      npcDialogue.style.display = 'flex'
+                      npcDialogueDiv.style.display = 'flex';
                     npcDialogueDiv.addEventListener('click', () => {
                         npcDialogue.innerText = '';
+                        npcDialogue.style.display = 'none';
                         npcDialogueDiv.style.display = 'none';
                         playerOptionsContainer.style.display = 'flex';
                         npcAnswerDiv.style.display = 'flex';
-                        npcAnswer.innerText = npc2.dialogue[0].npcLine[0];
-                        npc2.dialogue[0].playerOptions.forEach((playerOption) => {
+                        npcAnswer.innerText = npc.dialogue[0].npcLine[0];
+                        npc.dialogue[0].playerOptions.forEach((playerOption) => {
                             const button = document.createElement('button');
                             button.className = "player-options";
                             button.innerText = playerOption;
                             button.addEventListener('click', () => {
-                                handleDialogue(event, npc2)
+                                playerOptionsContainer.innerHTML = '';
+                                handleDialogue(event, npc)
                             })
                             playerOptionsContainer.appendChild(button);
                         })
                     })
-                }
-            })
         }
     }
 
@@ -1426,4 +1461,32 @@ if (localStorage.getItem('level') === '2') {
 } else {
 levels[1].init()
 }
+
+const mouse = {
+    x: undefined,
+    y: undefined,
+}
+
+// Battle Mouse
+
+canvas.addEventListener('click', (event) => {
+    if (activeTile) {
+        player.path = activeTile
+    }
+})
+
+window.addEventListener('mousemove', (event) => {
+    var rect = canvas.getBoundingClientRect();
+      mouse.x = (event.clientX - rect.left) * (canvas.width / rect.width);
+      mouse.y = (event.clientY - rect.top) * (canvas.height / rect.height);
+      activeTile = null
+      for (let index = 0; index < battleFloors.length; index++) {
+        const battleFloor = battleFloors[index]
+        if (mouse.x > battleFloor.position.x && mouse.x < battleFloor.position.x + battleFloor.size && 
+            mouse.y > battleFloor.position.y && mouse.y < battleFloor.position.y + battleFloor.size) {
+                activeTile = battleFloor
+                break;
+            }
+    }
+} )
 animate()
