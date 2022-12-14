@@ -10,6 +10,7 @@ class NPCSprites extends Sprite {
         name,
         paths,
         map,
+        loop = true,
     }) {
         super({
             position,
@@ -18,7 +19,7 @@ class NPCSprites extends Sprite {
             frames,
             sprites,
             animate,
-            rotation
+            rotation,
             })
         this.animate = true;
         this.name = name
@@ -27,6 +28,7 @@ class NPCSprites extends Sprite {
         this.lastSprite = '';
         this.paths = paths;
         this.map = map;
+        this.loop = loop;
     }
 
     update() {

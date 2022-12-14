@@ -1,5 +1,5 @@
 class Sprite {
-    constructor({position, velocity, imageSrc, frames = { max: 1, hold: 10 }, sprites, animate, rotation = 0, map, path }) {
+    constructor({position, velocity, imageSrc, frames = { max: 1, hold: 10 }, sprites, animate, rotation = 0, map, path, loop = true }) {
         this.position = position
         this.image = new Image()
         this.frames = { ...frames, val: 0, elapsed: 0 }
@@ -19,6 +19,7 @@ class Sprite {
         this.map = map;
         this.path = path;
         this.lastSprite = '';
+        this.loop = loop
 
         // function to make sprites work
         if (this.sprites) {
@@ -31,9 +32,10 @@ class Sprite {
     }
 
     // function to switch sprites
-    switchSprites(name) {
+    switchSprites(name, itLoop = true) {
         this.image = this.sprites[name].image;
         this.frames = this.sprites[name].frames;
+        this.loop = itLoop;
     }
 
     draw() {
@@ -62,10 +64,22 @@ class Sprite {
             this.frames.elapsed++
         }
 
-        if (this.frames.elapsed % this.frames.hold === 0)
-        if (this.frames.val < this.frames.max - 1) this.frames.val++
-        else this.frames.val = 0
+        if (this.frames.elapsed % this.frames.hold === 0) {
+        if (this.loop) {
+        if (this.frames.val < this.frames.max - 1) {
+            this.frames.val++
+        } else {
+        this.frames.val = 0
+        }
+    } else {
+        if (this.frames.val < this.frames.max - 1) {
+            this.frames.val++
+        } else {
+            this.loopCompleted = true;
+        }
     }
+    }
+}
 
     update() {
             // function to update the position of the player
@@ -76,6 +90,7 @@ class Sprite {
             const angle = Math.atan2(yDistance, xDistance)
             this.position.x += Math.cos(angle);
             this.position.y += Math.sin(angle);
+            console.log('moveu')
             if (Math.cos(angle) > 0) {
                 this.switchSprites('walkRight');
                 this.lastSprite = 'idleRight';

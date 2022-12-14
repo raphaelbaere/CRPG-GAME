@@ -1,11 +1,9 @@
 class Boundary {
-    static width = 32
-    static height = 32
     static class = 'boundary'
-    constructor({ position, map }) {
+    constructor({ position, map, width = 32, height = 32 }) {
         this.position = position
-        this.width = 32
-        this.height = 32
+        this.width = width
+        this.height = height
         this.class = 'boundary';
         this.map = map;
     }
