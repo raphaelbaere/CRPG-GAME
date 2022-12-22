@@ -90,6 +90,8 @@ const handleFinishDialogue = (optionsPassada, divPassada, dialogo, linha, npc2, 
             strings: [npc2.dialogue[dialogo].npcLine[linha]],
             typeSpeed: 40,
             showCursor: false,
+            onBegin: () => { audio.typing.play( )},
+            onComplete: () => { audio.typing.stop( )}
           };
         let typed = new Typed(pAtual, options);
         divAtual.addEventListener('click', () => {
@@ -99,6 +101,7 @@ const handleFinishDialogue = (optionsPassada, divPassada, dialogo, linha, npc2, 
             optionsAtual.style.display = 'flex';
             answerAtual.style.display = 'flex';
             typed.destroy();
+            audio.typing.stop();
             answerPAtual.innerText = npc2.dialogue[dialogo].npcLine[linha];
             const button = document.createElement('button');
             button.className = "player-options";
@@ -106,6 +109,7 @@ const handleFinishDialogue = (optionsPassada, divPassada, dialogo, linha, npc2, 
             button.addEventListener('click', () => {
                 handleFinish()
                 typed.destroy();
+                audio.typing.stop()
                 optionsAtual.innerHTML = '';
                 optionsAtual.style.display = 'none';
                 answerAtual.style.display = 'none';
@@ -127,10 +131,13 @@ const handleAnswer = (optionsPassada, divPassada, dialogo, linha, npc2, divAtual
             strings: [npc2.dialogue[dialogo].npcLine[linha]],
             typeSpeed: 40,
             showCursor: false,
+            onBegin: () => { audio.typing.play( )},
+            onComplete: () => { audio.typing.stop( )}
           };
         let typed = new Typed(pAtual, options);
         divAtual.addEventListener('click', () => {
             typed.destroy();
+            audio.typing.stop()
             pAtual.innerText = '';
             optionsAtual.innerHTML = '';
             divAtual.style.display = 'none';
@@ -143,6 +150,7 @@ const handleAnswer = (optionsPassada, divPassada, dialogo, linha, npc2, divAtual
             button.addEventListener('click', () => {
                 handleDialogue(event, npc2)
                 typed.destroy();
+                audio.typing.stop();
             })
             optionsAtual.appendChild(button);
         })
@@ -165,6 +173,16 @@ const handleFightForChat = (optionsPassada, divPassada, npc, divAtual, pAtual, o
     dialogue.initiated = true;
     dialogueDiv.style.display = 'none';
     overlappingDiv.style.backgroundColor = 'red';
+    gsap.to('#battle-alert', {
+        opacity: 1,
+        duration: 0.4,
+        onComplete() {
+            gsap.to('#battle-alert', {
+                opacity: 0,
+                duration: 0.4,
+            })
+        }
+    })
     gsap.to('#overlapping-div', {
         opacity: 0.3,
         duration: 0.4,
@@ -215,6 +233,8 @@ const handleDialogue = ({ target }, npc2) => {
 }
 
 // variable declarations for be changed for each map that I'm rendering right now,
+let counter = 0;
+let counter2 = 0;
 let samuel;
 let samuelSprite;
 let gloria;
@@ -1235,6 +1255,8 @@ const levels = {
 // Some buttons in the menu
 buttons[0].addEventListener('click', () => {
     const menu = document.querySelector('.menu');
+    audio.NewGame.play()
+    audio.city.play()
     menu.style.display = 'none';
     userGui.style.display = 'none';
     userUtils.style.display = 'none';
@@ -1254,6 +1276,7 @@ buttons[0].addEventListener('click', () => {
                         opacity: 0,
                         onComplete() {
                             moving = true;
+                            audio.Map.play();
                             game.changeMap = false;
                         }
                     })
@@ -1523,6 +1546,7 @@ function animate() {
                 button.className = "player-options";
                 button.innerText = "Tudo bem, adeus..";
                 button.addEventListener('click', () => {
+                    audio.typing.stop()
                     dialogue.initiated = false;
                     npcLastDialogueDiv.style.display = 'none';
                     dialogueDiv.style.display = 'none';
@@ -1534,12 +1558,15 @@ function animate() {
             }
             let options = {
                 strings: [npc.dialogue[0].npcLine[0]],
-                typeSpeed: 40
+                typeSpeed: 40,
+                onBegin: () => { audio.typing.play( )},
+                onComplete: () => { audio.typing.stop( )}
               };
             let typed = new Typed(npcDialogue, options);
             npcDialogue.style.display = 'block'
             npcDialogueDiv.style.display = 'flex';
             npcDialogueDiv.addEventListener('click', () => {
+                audio.typing.stop();
                 npcDialogue.innerText = '';
                 npcDialogue.style.display = 'none';
                 npcDialogueDiv.style.display = 'none';
@@ -1554,6 +1581,7 @@ function animate() {
                         button.addEventListener('click', () => {
                             playerOptionsContainer.innerHTML = '';
                             typed.destroy();
+                            audio.typing.stop()
                             handleDialogue(event, npc)
                         })
                         playerOptionsContainer.appendChild(button);
@@ -1643,6 +1671,7 @@ function animate() {
 }
 
     // moving the player, collisions checking and stuff
+    counter = 0;
     if (keys.w.pressed && lastKey === 'w') {
         if (battle.initiated) {
             player.position.y += playerSpeed
@@ -1697,6 +1726,11 @@ function animate() {
                     movable.position.y += playerSpeed
                     movable.move('w')
                 } else {
+                    counter += 1
+                    if (counter >= 441) {
+                        counter2 += 1;
+                        if (counter2 % 17 === 0) audio.footsteps.play()
+                    };
                     movable.position.y += playerSpeed
                 }
             })
@@ -1715,6 +1749,11 @@ function animate() {
                     movable.position.y += playerSpeed
                     movable.move('w')
                 } else {
+                    counter += 1
+                    if (counter >= 441) {
+                        counter2 += 1;
+                        if (counter2 % 17 === 0) audio.footsteps.play()
+                    };
                     movable.position.y += playerSpeed
                 }
             })
@@ -1821,6 +1860,11 @@ function animate() {
                     movable.position.y -= playerSpeed
                     movable.move('s')
                 } else {
+                    counter += 1
+                    if (counter >= 441) {
+                        counter2 += 1;
+                        if (counter2 % 17 === 0) audio.footsteps.play()
+                    };
                     movable.position.y -= playerSpeed
                 }
             })
@@ -1883,6 +1927,11 @@ function animate() {
                     movable.position.y -= playerSpeed
                     movable.move('s')
                 } else {
+                    counter += 1
+                    if (counter >= 441) {
+                        counter2 += 1;
+                        if (counter2 % 17 === 0) audio.footsteps.play()
+                    };
                     movable.position.y -= playerSpeed
                 }
             })
@@ -1946,6 +1995,11 @@ function animate() {
                     movable.position.x += playerSpeed
                     movable.move('a')
                 } else {
+                    counter += 1
+                    if (counter >= 441) {
+                        counter2 += 1;
+                        if (counter2 % 17 === 0) audio.footsteps.play()
+                    };
                     movable.position.x += playerSpeed
                 }
             })
@@ -2007,6 +2061,11 @@ function animate() {
                     movable.position.x += playerSpeed
                     movable.move('a')
                 } else {
+                    counter += 1
+                    if (counter >= 441) {
+                        counter2 += 1;
+                        if (counter2 % 17 === 0) audio.footsteps.play()
+                    };
                     movable.position.x += playerSpeed
                 }
             })
@@ -2068,6 +2127,11 @@ function animate() {
                     movable.position.x -= playerSpeed
                     movable.move('d')
                 } else {
+                    counter += 1
+                    if (counter >= 441) {
+                        counter2 += 1;
+                        if (counter2 % 17 === 0) audio.footsteps.play()
+                    };
                     movable.position.x -= playerSpeed
                 }
             })
@@ -2128,6 +2192,11 @@ function animate() {
                     movable.position.x -= playerSpeed
                     movable.move('d')
                 } else {
+                    counter += 1
+                    if (counter >= 441) {
+                        counter2 += 1;
+                        if (counter2 % 17 === 0) audio.footsteps.play()
+                    };
                     movable.position.x -= playerSpeed
                 }
             })
